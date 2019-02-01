@@ -450,7 +450,7 @@ def writeStatsCSV(predictionFile, analysisFile):
 def writePatientLevelPredictions(ppatientPrediction, patientSurv, predictionFile, plpFile):
     pFile = open(plpFile, 'a+')
     pFile.write(predictionFile+"\n")
-    pFile.write("TCGA_ID, Surv5, Srv10, DiseaseFree5, Surv5, Srv10, DiseaseFree5\n")
+    pFile.write("TCGA_ID, Surv5, Srv10, DiseaseFree5, Surv5, Srv10, DiseaseFree5, Surv5, Srv10, DiseaseFree5\n")
     keys = ppatientPrediction.keys()
     sortedKeys = list(keys)
     sortedKeys.sort()
@@ -463,8 +463,29 @@ def writePatientLevelPredictions(ppatientPrediction, patientSurv, predictionFile
         s5out = patientSurv[p]['s5out']
         s10out = patientSurv[p]['s10out']
         df5out = patientSurv[p]['df5out']
+        if s5out.startswith('GTE'):
+            s5outctr = 1
+        elif s5out.startswith('LT'):
+            s5outctr = 0
+        else:
+            s5outctr = -1
 
-        out = p + ',' + str(s5) +  ',' + str(s10) + ',' + str(df5) + ',' + str(s5out) + ',' + str(s10out) + ',' + str(df5out) +'\n'
+        if s10out.startswith('GTE'):
+            s10outctr = 1
+        elif s10out.startswith('LT'):
+            s10outctr = 0
+        else:
+            s10outctr = -1
+
+        if df5out.startswith('GTE'):
+            df5outctr = 1
+        elif df5out.startswith('LT'):
+            df5outctr = 0
+        else:
+            df5outctr = -1
+
+        out = p + ',' + str(s5) +  ',' + str(s10) + ',' + str(df5) + ',' + str(s5out) + ',' + str(s10out) + ',' + str(df5out) + \
+            ',' + str(s5outctr) + ',' + str(s10outctr) + ',' + str(df5outctr) +'\n'
         pFile.write(out)
     pFile.close()
 
